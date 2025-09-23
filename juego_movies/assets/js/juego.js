@@ -10,6 +10,7 @@ const getMoviesDeck = () => {
     for (let i = 1; i <= NMOVIES; i++) {
         movieDeck.push("0" + i + "M")
     }
+    movieDeck = _.shuffle(movieDeck)
     return movieDeck;
 }
 
@@ -20,6 +21,7 @@ const getElementsDeck = () => {
             elementDeck.push("0" + i + "C" + j)
         }
     }
+    elementDeck = _.shuffle(elementDeck)
     return elementDeck;
 }
 
@@ -31,13 +33,13 @@ const newGame = document.getElementById("show-movie")
 // Al hacer click en el botón de nuevo juego, se reinicia el mazo de películas y se saca una película al azar
 newGame.addEventListener("click", () => {
     // cogemos el mazo de películas
-    let movies = movieDeck
-    let clicks = 0
-    if (clicks < NMOVIES) {
-        let index = Math.floor(Math.random() * movies.length)
-        let movie = movies.splice(index, 1)[0]
-        const movieDiv = document.getElementById("pelicula-caratula")
-        movieDiv.innerHTML = `<img src="assets/movies/${movie}.jpg" class="elemento" alt="">`
-        ++clicks
+    if (movieDeck.length === 0) {
+        movieDeck = getMoviesDeck()
     }
+    let movies = movieDeck
+    let index = Math.floor(Math.random() * movies.length)
+    let movie = movies.splice(index, 1)[0]
+
+    const movieDiv = document.getElementById("pelicula-caratula")
+    movieDiv.innerHTML = `<img src="assets/movies/${movie}.jpg" class="elemento" alt="">`
 })
