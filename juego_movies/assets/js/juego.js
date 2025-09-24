@@ -17,7 +17,7 @@ const getMoviesDeck = () => {
 const getElementsDeck = () => {
     let elementDeck = []
     for (let i = 1; i <= NMOVIES; i++) {
-        for (let j = 1; j <= NELEMENTSPMOVIE; j++) {
+        for (let j = 0; j < NELEMENTSPMOVIE; j++) {
             elementDeck.push("0" + i + "C" + j)
         }
     }
@@ -32,6 +32,8 @@ let elementDeck = getElementsDeck()
 const newGame = document.getElementById("show-movie")
 // Al hacer click en el botón de nuevo juego, se reinicia el mazo de películas y se saca una película al azar
 newGame.addEventListener("click", () => {
+    const elementDiv = document.getElementById("elementos-pelicula")
+    elementDiv.innerHTML = ""
     // cogemos el mazo de películas
     if (movieDeck.length === 0) {
         movieDeck = getMoviesDeck()
@@ -42,4 +44,20 @@ newGame.addEventListener("click", () => {
 
     const movieDiv = document.getElementById("pelicula-caratula")
     movieDiv.innerHTML = `<img src="assets/movies/${movie}.jpg" class="elemento" alt="">`
+})
+
+//Evento para el botón adivina
+const guess = document.getElementById("guess")
+// Al hacer click en el botón de adivina, se saca un recurso al azar
+guess.addEventListener("click", () => {
+    
+    // cogemos el mazo de recursos
+    let elements = elementDeck
+
+    // cogemos un recurso al azar del mazo
+    let element = elements.splice(0, 1)[0]
+
+    // cogemos el div donde se van a poner los recursos y añadimos el recurso
+    const elementDiv = document.getElementById("elementos-pelicula")
+    elementDiv.innerHTML += `<img src="assets/characters/${element}.jpg" class="recurso" alt="">`
 })
