@@ -5,6 +5,9 @@
 // En este caso, 5 películas y 3 recursos por película
 const NMOVIES = 5
 const NELEMENTSPMOVIE = 3
+let attemps = document.getElementById("tries")
+let hits = 0
+
 const getMoviesDeck = () => {
     let movieDeck = []
     for (let i = 1; i <= NMOVIES; i++) {
@@ -33,6 +36,7 @@ let dragged
 
 //Evento para el botón nuevo juego
 const newGame = document.getElementById("show-movie")
+
 // Al hacer click en el botón de nuevo juego, se reinicia el mazo de películas y se saca una película al azar
 newGame.addEventListener("click", () => {
     const elementDiv = document.getElementById("elementos-pelicula")
@@ -62,11 +66,9 @@ newGame.addEventListener("click", () => {
         div.addEventListener('drop', e => {
             e.preventDefault()
             if (movie.slice(0, 2) == dragged.id.slice(0,2)) {
-                console.log("au")
                 div.outerHTML = dragged.outerHTML
-                elementDiv.removeChild(dragged)
+                elementDiv.removeChild(dragged)    
             }
-
         })
 
         respuestas.appendChild(div)
@@ -91,14 +93,11 @@ guess.addEventListener("click", () => {
     div.id = element
     div.innerHTML = `<img class="recurso" src="./assets/characters/${element}.jpg" alt="" draggable="false">`
 
-    console.log("Elemento creado")
-
 
     // Manejador de cuando se pincha para empezar a arrastrar
     div.addEventListener('dragstart', (ev) => {
         console.log(`Empieza a arrastrarse ${element}`)
         dragged = ev.target
-
     })
 
 
