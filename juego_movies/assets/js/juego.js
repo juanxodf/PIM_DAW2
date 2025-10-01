@@ -33,9 +33,10 @@ let elementDeck = getElementsDeck()
 let elements = elementDeck
 const respuestas = document.getElementById("adivinadas")
 let dragged
+const divButtons = document.getElementById('buttons')
 
 //Evento para el botón nuevo juego
-const newGame = document.getElementById("show-movie")
+let newGame = document.getElementById("show-movie")
 
 // Al hacer click en el botón de nuevo juego, se reinicia el mazo de películas y se saca una película al azar
 newGame.addEventListener("click", () => {
@@ -65,9 +66,22 @@ newGame.addEventListener("click", () => {
         div.addEventListener('dragover', e => e.preventDefault()) // Necesario
         div.addEventListener('drop', e => {
             e.preventDefault()
-            if (movie.slice(0, 2) == dragged.id.slice(0,2)) {
+            if (movie.slice(0, 2) == dragged.id.slice(0, 2)) {
                 div.outerHTML = dragged.outerHTML
-                elementDiv.removeChild(dragged)    
+                elementDiv.removeChild(dragged)
+                ++hits
+                if (hits === 3) {
+                    setTimeout(alert('HAS GANADO'), 150)
+                    disableButton()
+                }
+
+            } else {
+                --attemps.innerHTML
+                if (attemps.innerHTML < 1) {
+                    setTimeout(alert('HAS PERDIDO'), 150)
+                    disableButton()
+                }
+
             }
         })
 
@@ -76,7 +90,7 @@ newGame.addEventListener("click", () => {
 })
 
 //Evento para el botón adivina
-const guess = document.getElementById("guess")
+let guess = document.getElementById("guess")
 
 // Al hacer click en el botón de adivina, se saca un recurso al azar
 guess.addEventListener("click", () => {
@@ -103,3 +117,15 @@ guess.addEventListener("click", () => {
 
     elementDiv.appendChild(div)
 })
+
+const disableButton = ()=>{
+    newGame.outerHTML = ''
+    guess.outerHTML = ''
+    const resetButton = document.createElement('button')
+    resetButton.textContent = 'Resetear Juego'
+    resetButton.className = 'btn btn-primary'
+    divButtons.appendChild(resetButton)
+    resetButton.addEventListener('click',()=>{
+        location.reload()
+    })
+}
