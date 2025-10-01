@@ -27,6 +27,9 @@ const getElementsDeck = () => {
 
 let movieDeck = getMoviesDeck()
 let elementDeck = getElementsDeck()
+let elements = elementDeck
+const respuestas = document.getElementById("adivinadas")
+let dragged
 
 //Evento para el botón nuevo juego
 const newGame = document.getElementById("show-movie")
@@ -34,6 +37,10 @@ const newGame = document.getElementById("show-movie")
 newGame.addEventListener("click", () => {
     const elementDiv = document.getElementById("elementos-pelicula")
     elementDiv.innerHTML = ""
+
+    // cada vez que le damos al boton de mostrar pelicula, reiniciamos el mazo del boton "Adivina"
+    elements = getElementsDeck()
+
     // cogemos el mazo de películas
     if (movieDeck.length === 0) {
         movieDeck = getMoviesDeck()
@@ -44,20 +51,56 @@ newGame.addEventListener("click", () => {
 
     const movieDiv = document.getElementById("pelicula-caratula")
     movieDiv.innerHTML = `<img src="assets/movies/${movie}.jpg" class="elemento" alt="">`
+
+    respuestas.innerHTML = ''
+
+    for (let i = 0; i < 3; i++) {
+        let div = document.createElement('div')
+        div.className = 'elemento2 drop-zone'
+
+        div.addEventListener('dragover', e => e.preventDefault()) // Necesario
+        div.addEventListener('drop', e => {
+            e.preventDefault()
+            if (movie.slice(0, 2) == dragged.id.slice(0,2)) {
+                console.log("au")
+                div.outerHTML = dragged.outerHTML
+                elementDiv.removeChild(dragged)
+            }
+
+        })
+
+        respuestas.appendChild(div)
+    }
 })
 
 //Evento para el botón adivina
 const guess = document.getElementById("guess")
+
 // Al hacer click en el botón de adivina, se saca un recurso al azar
 guess.addEventListener("click", () => {
-    
-    // cogemos el mazo de recursos
-    let elements = elementDeck
 
-    // cogemos un recurso al azar del mazo
+    // cogemos un recurso al azar del mazo de elementos
     let element = elements.splice(0, 1)[0]
 
     // cogemos el div donde se van a poner los recursos y añadimos el recurso
     const elementDiv = document.getElementById("elementos-pelicula")
-    elementDiv.innerHTML += `<img src="assets/characters/${element}.jpg" class="recurso" alt="">`
+
+    let div = document.createElement('div')
+    div.className = 'elemento'
+    div.setAttribute('draggable', 'true')
+    div.id = element
+    div.innerHTML = `<img class="recurso" src="./assets/characters/${element}.jpg" alt="" draggable="false">`
+
+    console.log("Elemento creado")
+
+
+    // Manejador de cuando se pincha para empezar a arrastrar
+    div.addEventListener('dragstart', (ev) => {
+        console.log(`Empieza a arrastrarse ${element}`)
+        dragged = ev.target
+
+    })
+
+
+    elementDiv.appendChild(div)
 })
